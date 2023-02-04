@@ -1,0 +1,1 @@
+# gmoriki.github.io
