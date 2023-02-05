@@ -59,7 +59,7 @@ img {
   margin-bottom: 40px;
   text-align: center;
   letter-spacing: .05em;
-  color: #333;
+  color: #692927;
 }
 
 .lead {
@@ -117,7 +117,7 @@ img {
   padding: 5px 0;
   transition: .3s;
   letter-spacing: .05em;
-  color: #333;
+  color: #692927;
 }
 .gnav-item a:after {
   position: absolute;
@@ -145,6 +145,7 @@ img {
   justify-content: center;
   height: 85vh;
   text-align: center;
+  background-color: seashell;
 }
 
 .mv-container {
@@ -156,7 +157,8 @@ img {
   font-weight: bold;
   line-height: 1.2;
   margin-bottom: 5px;
-  letter-spacing: .1em;
+  letter-spacing: .01em;
+  color: olivedrab;
 }
 .mv-subtitle {
   font-size: 20px;
@@ -194,57 +196,60 @@ img {
 .works-item:nth-of-type(3n) {
   margin-right: 0;
 }
-
+/* 
 .works-img img {
   border: 1px solid #e6e6e6;
-}
+} */
 
 .works-name {
-  font-size: 12px;
+  font-size: 20px;
   font-weight: bold;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .works-info {
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 5px;
 }
 
-/*--------------------------------
- Skill
----------------------------------*/
-.skill-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-bottom: -50px;
+/* Table Design */
+/* https://tanuhack.com/df-to-web/ */
+table {
+  margin-top: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 15px;
+  table-layout: fixed;
+  text-align: right;
+  padding: 0.4em;
+}
+thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+tr, th, td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+th {
+  font-weight: bold;
 }
 
-.skill-item {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 48%;
-  margin-bottom: 50px;
-}
-
-.skill-img {
-  width: 60px;
-  height: auto;
-  margin-right: 20px;
-}
-
-.skill-body {
-  flex: 1;
-}
-
-.skill-name {
-  margin-bottom: 10px;
-}
-
-.skill-text {
-  font-size: 14px;
-  line-height: 1.8;
+/* Code Design */
+code{
+  font-family: Consolas, 'Courier New', monospace;
 }
 
 /*--------------------------------
