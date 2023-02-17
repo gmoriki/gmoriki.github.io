@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <meta property='og:type' content='website'>
+  <meta property='og:title' content='python for  institutional research'>
+  <meta property='og:url' content='URLが入る'>
+  <meta property='og:description' content='powered by gmoriki'>
+  <meta property="og:image" content="img/ogp.png">
+  <meta name="description" content="powered by gmoriki" />
+  <title>gmoriki</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="css/ress.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="css/style.css" media="all" rel="stylesheet" type="text/css" />
+  <link rel="shortcut icon" href="img/fabicon.svg" />
+  <link rel=”canonical” href=”URLが入る” />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/monokai.min.css">
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <!-- header -->
+    <header class="header ">
+      <div class="container">
+        <h1 class="header-logo">
+          <a href=".">gmoriki🐳</a>
+          /.xlsから.xlsxへ変換したい
+        </h1>
+        <nav class="gnav">
+          <ul class="gnav-list">
+            <li class="gnav-item"><a href=".#works">WORKS</a></li>
+            <li class="gnav-item"><a href="./#about">ABOUT</a></li>
+            <li class="gnav-item"><a href="./#contact">CONTACT</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- /header -->
+
+    <main class="content">
+
+      <article class="article">
+        <div class="article-container">
+          <h2 class="article-title">[サンプルページ].xlsを.xlsxへ一括置換したい</h2>
+          <div class="article-body">
+            <p>
+              <img src="img/coffee.svg" alt="" width="300" height="200" style="display: block; margin: auto;">
+            </p>
+            <p>
+              .xlsファイルを.xlsxに一括変換したい。 ※ サンプルページです
+            </p>
+            <h3>利用シーンと目的</h3>
+            <p>大学で使用しているWebアプリが古くて.xls出力にしか対応していない。<br>
+            でも入力ファイルは.xlsx形式しか受け付けてくれない。<br>
+            →複数の.xlsファイルを.xlsxファイルへ一括置換したい</p>
+            <h3>実装の考え方</h3>
+            <p>結論だけ言えば、<code>pandas</code>で読み込んだxlsをxlsxで出力すれば良い。pythonにはExcelを扱う方法が複数用意されている。(記事を参照しつつ紹介)</p>
+            <h3>コード</h3>
+            <p>実際のコードがこちら。クラス内メソッドをコピペしただけなので粗が残っている。</p>
+            <pre><code class='python'>
+  import pandas as pd
+  from pathlib import Path
+
+  def xls_to_xlsx(self):
+      # 対象フォルダ内のxlsファイルを読み込む
+      for xls_file in self.input_path.glob("./*.xls"):
+          df_xls = pd.read_excel(xls_file)
+
+          print(f"{xls_file.name}を{xls_file.stem}.xlsxへ変換します")
+          df_xls.to_excel(self.output_path.joinpath(xls_file.stem + ".xlsx"), index=False)
+      return 0
+            </code></pre>
+            <h3>テーブル</h3>
+            この記事ではテーブルが必要ない
+            <p>
+            <table border="1" class="dataframe">
+              <thead>
+                <tr style="text-align: right;">
+                  <th></th>
+                  <th>column1</th>
+                  <th>column2</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th>0</th>
+                  <td>one</td>
+                  <td>apple</td>
+                </tr>
+                <tr>
+                  <th>1</th>
+                  <td>two</td>
+                  <td>orange</td>
+                </tr>
+                <tr>
+                  <th>2</th>
+                  <td>three</td>
+                  <td>grape</td>
+                </tr>
+              </tbody>
+            </table>
+            </p>
+            <h3>まとめと補足</h3>
+            <p>使いまわす機会があるのかは疑問が残る。だけど既存の記事の中には<code>openpyxl</code>でゴニョゴニョ処理していたものもあったので、最も簡便な方法を紹介するいい機会かも。</p>
+            <h3>参考</h3>
+            <a href="https://note.nkmk.me/python-pandas-read-excel/">https://note.nkmk.me/python-pandas-read-excel/</a>
+          </div>
+          <div class="home-link">
+            <a href="./#works">Works一覧へ</a>
+          </div>
+        </div>
+      </article>
+
+      <div class="page-top" id="js-page-top">
+        <span class="material-icons-outlined">expand_less</span>
+      </div>
+    </main>
+
+    <!-- footer -->
+    <footer class="footer">
+      <div class="copyright">&copy;gmoriki</div>
+    </footer>
+    <!-- /footer -->
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type='text/javascript' src="js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>

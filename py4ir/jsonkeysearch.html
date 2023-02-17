@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <meta property='og:type' content='website'>
+  <meta property='og:title' content='python for  institutional research'>
+  <meta property='og:url' content='URLが入る'>
+  <meta property='og:description' content='powered by gmoriki'>
+  <meta property="og:image" content="img/ogp.png">
+  <meta name="description" content="powered by gmoriki" />
+  <title>gmoriki</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="css/ress.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="css/style.css" media="all" rel="stylesheet" type="text/css" />
+  <link rel="shortcut icon" href="img/fabicon.svg" />
+  <link rel=”canonical” href=”URLが入る” />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/monokai.min.css">
+</head>
+
+<body>
+  <div class="wrapper">
+
+    <!-- header -->
+    <header class="header ">
+      <div class="container">
+        <h1 class="header-logo">
+          <a href=".">Python for IR🐳</a>
+          /jsonkeyresearch
+        </h1>
+        <nav class="gnav">
+          <ul class="gnav-list">
+            <li class="gnav-item"><a href=".#works">WORKS</a></li>
+            <li class="gnav-item"><a href="./#about">ABOUT</a></li>
+            <li class="gnav-item"><a href="./#contact">CONTACT</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- /header -->
+
+    <main class="content">
+
+      <article class="article">
+        <div class="article-container">
+          <h2 class="article-title">JSONファイルを明示的に探索する</h2>
+          <div class="article-body">
+            <p>
+              <img src="img/cat.svg" alt="" width="300" height="200" style="display: block; margin: auto;">
+            </p>
+            <p>
+              JSON解析、エイヤでスクラッチしがちなのでライブラリにしました
+            </p>
+            <h3>利用シーンと目的</h3>
+            <p>JSON形式のファイルはIR業務の中でよく見かける。ScivalAPI等の各種WebAPIから取得できるファイル形式の多くはJSONファイルである。しかしAPIで取得したJSONの階層数やキーの種類はAPIによって様々で、多くの場合入れ子構造になっている。<br>
+            以下はScivalAPIから取得したJSONの例である。<br></p>
+            <pre><code class='python'>
+jsonfilename = {
+    "dataSource": {"sourceName": "Scopus", "lastUpdated": "2099-02-08", "metricStartYear": 2000, "metricEndYear": 2999},
+    "results": [
+        {
+            "metrics": [
+                {"metricType": "ScholarlyOutput", "value": 1160},
+                {"metricType": "CitationCount", "value": 20969},
+                {"metricType": "CitationsPerPublication", "value": 18.076725},
+                {"metricType": "FieldWeightedCitationImpact", "value": 1.2139008},
+                {
+                    "metricType": "OutputsInTopCitationPercentiles",
+                    "values": [
+                        {"threshold": 1, "value": 29, "percentage": 2.5},
+                        {"threshold": 5, "value": 69, "percentage": 5.9482756},
+                        {"threshold": 10, "value": 107, "percentage": 9.224137},
+                        {"threshold": 25, "value": 282, "percentage": 24.310345},
+                    ],
+                },
+                {
+                    "metricType": "PublicationsInTopJournalPercentiles",
+                    "impactType": "CiteScore",
+                    "values": [
+                        {"threshold": 1, "value": 28, "percentage": 2.5547445},
+                        {"threshold": 5, "value": 194, "percentage": 17.70073},
+                        {"threshold": 10, "value": 934, "percentage": 85.21898},
+                        {"threshold": 25, "value": 1075, "percentage": 98.08395},
+                    ],
+                },
+            ],
+            "institution": {
+                "link": {"@ref": "self", "@href": "https:hogehoge", "@type": "application/json"},
+                "name": "piyo University",
+                "id": 'XXX',
+                "uri": "Institution/XXX",
+                "country": "hoge",
+                "countryCode": "hoge",
+            },
+        }
+    ],
+}
+            </code></pre>
+            <p>このファイルから<code>'ScholarlyOutput'</code>の要素に含まれる値、例えば<code>'value'</code>を取得したい。地道にパースして取得することも可能だが、後から見て何が何だかわからん。</p>
+            <pre><code class='python'>
+  metric = jsonfilename["results"][0]["metrics"][0] # what's this?
+  print(metric)
+  # {'metricType': 'ScholarlyOutput', 'value': 1160}
+            </code></pre>
+            <p>可読性の低さと汎用性の低さが際立つ。APIの変更に伴うコードの修正は必至。何より、JSONを扱うたびに似たような解析・実装を繰り返していることが無駄な労力のように感じる。</p>
+            <p>こうした課題意識から、「JSONファイルのどこをどのように探して得た結果なのか」というプロセスと結果が明確なJSON探索ライブラリを作成した。</p>
+            <h3>実装の考え方</h3>
+            <p>JSONの辞書要素を再帰的に取得して、ある条件を満たす場合に返り値にappendすれば良い。その際、「何をどう解析した」という経緯が分かるようにしたい。</p>
+            <p>実際にライブラリ<code>jsonkeysearch</code>を作成した。PyPlに登録しているので最新版をpipインストールして使用すること。conda?ちょっと何言ってるか分かんないですね...</p>
+            <pre><code>
+  pip install jsonkeysearch
+            </code></pre>
+            <p><code>JSONKeySearch</code>クラスに解析したい辞書型JSONの変数名を渡した上でインスタンスを作成する。</p>
+            <pre><code class='python'>
+  from jsonkeysearch import JSONKeySearch
+  instance = JSONKeySearch(jsonObject=jsonfilename)
+            </code></pre>
+            <p>解析対象のキーおよび値を引数としてメソッドsearchに渡して実行すれば、<code>instance.jsonObject</code>に処理結果が格納される。一応searchの返り値も同様の処理結果としている。</p>
+            <pre><code class='python'>
+  instance.search(key=keyhoge,value=valuepiyo)
+  print(instance.jsonObject)
+  # {'keyhoge': 'valuepiyo', 'value': 1160}
+            </code></pre>
+            <p>keyhogeに探索したいキーを渡し、valuepiyoにキーの値を指定する。
+              valuepiyoを""に設定すればkeyhogeを含む全ての値を返す。</p>
+            <h3>コード</h3>
+            <p>冒頭のJSONファイルからScholaryOutputを含む要素のみ取得したい場合</p>
+            <pre><code class='python'>
+  target = JSONKeySearch(jsonObject=jsonfilename)
+  target.search(key="metricType", value="ScholarlyOutput"})
+  print(target.jsonObject)
+
+  # [{'metricType': 'ScholarlyOutput', 'value': 1160}]
+            </code></pre>
+            <p>冒頭のJSONファイルからvalueを含む要素を全て取得したい場合</p>
+            <pre><code class='python'>
+  target = JSONKeySearch(jsonObject=jsonfilename)
+  target.search(key="value", value="")
+  print(target.jsonObject)
+
+  # [{'metricType': 'ScholarlyOutput', 'value': 1160},
+  #  {'metricType': 'CitationCount', 'value': 20969},
+  #  {'metricType': 'CitationsPerPublication', 'value': 18.076725},
+  #  {'metricType': 'FieldWeightedCitationImpact', 'value': 1.2139008},
+  #  {'threshold': 1, 'value': 29, 'percentage': 2.5},
+  #  {'threshold': 5, 'value': 69, 'percentage': 5.9482756},
+  #  {'threshold': 10, 'value': 107, 'percentage': 9.224137},
+  #  {'threshold': 25, 'value': 282, 'percentage': 24.310345},
+  #  {'threshold': 1, 'value': 28, 'percentage': 2.5547445},
+  #  {'threshold': 5, 'value': 194, 'percentage': 17.70073},
+  #  {'threshold': 10, 'value': 934, 'percentage': 85.21898},
+  #  {'threshold': 25, 'value': 1075, 'percentage': 98.08395}]
+            </code></pre>
+            <h3>まとめと補足</h3>
+            <p>JSON解析コードをリファクタリングしている時、分からないことも多くWebの情報を漁っていたが、JSON解析の手法はあれど汎用的な解析手法が紹介されていなかった。オブジェクト指向っぽくすればコードが読みやすくなるし機能の改修も楽だから、PyPlへの登録の練習も兼ねて実装した。</p>
+            <p>なおJSONKeySearchのメソッドfind_keyをオーバーライドした子クラスを定義すれば、より複雑な条件で探索が可能になる。
+              JSONKeySearchWithASJCmetricsFiltersはその一例。ASJCごとの論文指標を取得するために入れ子を操作している。</p>
+            <h3>参考</h3>
+            <p>以下で紹介されているJSON探索再帰処理を参考にした。Special Thanks!!!</p>
+            <a href="https://qiita.com/saka2jp/items/3b138d3ebbdaa873eaa5">https://qiita.com/saka2jp/items/3b138d3ebbdaa873eaa5</a>
+          </div>
+          <div class="home-link">
+            <a href="./#works">Works一覧へ</a>
+          </div>
+        </div>
+      </article>
+
+      <div class="page-top" id="js-page-top">
+        <span class="material-icons-outlined">expand_less</span>
+      </div>
+    </main>
+
+    <!-- footer -->
+    <footer class="footer">
+      <div class="copyright">&copy;gmoriki</div>
+    </footer>
+    <!-- /footer -->
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type='text/javascript' src="js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+</body>
+
+</html>
