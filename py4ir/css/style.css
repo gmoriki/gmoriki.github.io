@@ -161,17 +161,25 @@ img {
   color: olivedrab;
 }
 .mv-subtitle {
-  font-size: 40px;
+  font-size: 30px;
   /* font-weight: bold; */
   line-height: 1;
   margin-bottom: 40px;
-  letter-spacing: .02em;
+  letter-spacing: .01em;
   color: #777474;
 }
 
 .mv-text {
   font-size: 20px;
   line-height: 1.8;
+}
+
+.mv-news-text{
+  font-size: 15px;
+  margin-top: 10px;
+  line-height: 1.8;
+  color: #333;
+  background-color: #d3e494;
 }
 
 /*--------------------------------
