@@ -28,7 +28,7 @@
     <header class="header ">
       <div class="container">
         <h1 class="header-logo">
-          <a href=".">Python for IR🐳</a>
+          <a href=".">Python for IR🏫</a>
           /jsonkeyresearch
         </h1>
         <nav class="gnav">
@@ -51,8 +51,12 @@
             <p>
               <img src="img/cat.svg" alt="" width="300" height="200" style="display: block; margin: auto;">
             </p>
+            <p style='text-align: right;font-size: 13px;'>
+              更新日：2023年2月18日
+            </p>
             <p>
               JSON解析、エイヤでスクラッチしがちなのでライブラリにしました
+              <a href="https://github.com/gmoriki/jsonkeysearch">https://github.com/gmoriki/jsonkeysearch</a>
             </p>
             <h3>利用シーンと目的</h3>
             <p>JSON形式のファイルはIR業務の中でよく見かける。ScivalAPI等の各種WebAPIから取得できるファイル形式の多くはJSONファイルである。しかしAPIで取得したJSONの階層数やキーの種類はAPIによって様々で、多くの場合入れ子構造になっている。<br>
@@ -124,10 +128,10 @@ jsonfilename = {
   print(instance.jsonObject)
   # {'keyhoge': 'valuepiyo', 'value': 1160}
             </code></pre>
-            <p>keyhogeに探索したいキーを渡し、valuepiyoにキーの値を指定する。
-              valuepiyoを""に設定すればkeyhogeを含む全ての値を返す。</p>
+            <p><code>keyhoge</code>に探索したいキーを渡し、<code>valuepiyo</code>にキーの値を指定する。
+            <code>valuepiyo</code>に<code>""</code>を設定すれば<code>keyhoge</code>を含む全ての値を返す。</p>
             <h3>コード</h3>
-            <p>冒頭のJSONファイルからScholaryOutputを含む要素のみ取得したい場合</p>
+            <p>冒頭のJSONファイルから<code>ScholaryOutput</code>を含む要素のみ取得したい場合</p>
             <pre><code class='python'>
   target = JSONKeySearch(jsonObject=jsonfilename)
   target.search(key="metricType", value="ScholarlyOutput"})
@@ -135,7 +139,7 @@ jsonfilename = {
 
   # [{'metricType': 'ScholarlyOutput', 'value': 1160}]
             </code></pre>
-            <p>冒頭のJSONファイルからvalueを含む要素を全て取得したい場合</p>
+            <p>冒頭のJSONファイルから<code>value</code>を含む要素を全て取得したい場合</p>
             <pre><code class='python'>
   target = JSONKeySearch(jsonObject=jsonfilename)
   target.search(key="value", value="")
@@ -156,8 +160,8 @@ jsonfilename = {
             </code></pre>
             <h3>まとめと補足</h3>
             <p>JSON解析コードをリファクタリングしている時、分からないことも多くWebの情報を漁っていたが、JSON解析の手法はあれど汎用的な解析手法が紹介されていなかった。オブジェクト指向っぽくすればコードが読みやすくなるし機能の改修も楽だから、PyPlへの登録の練習も兼ねて実装した。</p>
-            <p>なおJSONKeySearchのメソッドfind_keyをオーバーライドした子クラスを定義すれば、より複雑な条件で探索が可能になる。
-              JSONKeySearchWithASJCmetricsFiltersはその一例。ASJCごとの論文指標を取得するために入れ子を操作している。</p>
+            <p>なお<code>JSONKeySearch</code>のメソッド<code>find_key</code>をオーバーライドした子クラスを定義すれば、より複雑な条件で探索が可能になる。
+              <code>JSONKeySearchWithASJCmetricsFilters</code>はその一例。ASJCごとの論文指標を取得するために入れ子を操作している。</p>
             <h3>参考</h3>
             <p>以下で紹介されているJSON探索再帰処理を参考にした。Special Thanks!!!</p>
             <a href="https://qiita.com/saka2jp/items/3b138d3ebbdaa873eaa5">https://qiita.com/saka2jp/items/3b138d3ebbdaa873eaa5</a>
